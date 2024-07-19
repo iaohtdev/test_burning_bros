@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_burning_bros/core/router/app_routes.dart';
-import 'package:test_burning_bros/core/theme/app_color.dart';
 import 'package:test_burning_bros/core/theme/app_textstyle.dart';
 import 'package:test_burning_bros/presentation/cubits/product/product_cubit.dart';
 import 'package:test_burning_bros/presentation/cubits/product/product_state.dart';
+import 'package:test_burning_bros/presentation/views/home/components/app_bar.dart';
 import 'package:test_burning_bros/presentation/views/home/components/item_product.dart';
 import 'package:test_burning_bros/presentation/widgets/app_loading.dart';
 
@@ -19,10 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  final _searchController = TextEditingController();
   bool _searchBoolean = false;
   Timer? _debounce;
-  final int _debounceDuration = 900;
   late ProductCubit cubit;
   @override
   void initState() {
@@ -52,11 +50,32 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void onTapFavorite() {
+    Navigator.pushNamed(context, Routes.favorites);
+  }
+
+  void onTapSearch() {
+    setState(() {
+      _searchBoolean = true;
+    });
+  }
+
+  void onClearSearch() {
+    setState(() {
+      _searchBoolean = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
-      appBar: _appBar(),
+      appBar: CustomAppBar(
+          cubit: cubit,
+          searchBoolean: _searchBoolean,
+          onSearchTap: onTapSearch,
+          onClearSearch: onClearSearch,
+          onFavoriteTap: onTapFavorite),
       body: BlocConsumer<ProductCubit, ProductState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -118,79 +137,5 @@ class _HomeScreenState extends State<HomeScreen> {
         style: AppTextStyles.textStyle(color: Colors.grey),
       ),
     ));
-  }
-
-  AppBar _appBar() {
-    return AppBar(
-      backgroundColor: AppColor.primaryColor,
-      automaticallyImplyLeading: false,
-      title: !_searchBoolean
-          ? Text(
-              'Product List',
-              style: AppTextStyles.textStyleBold(
-                  color: Colors.white, fontSize: 22),
-            )
-          : __searchTextField(),
-      actions: !_searchBoolean
-          ? [
-              IconButton(
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _searchBoolean = true;
-                    });
-                  }),
-              IconButton(
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => onTapFavorite()),
-            ]
-          : [
-              IconButton(
-                  icon: const Icon(
-                    Icons.clear,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _searchBoolean = false;
-                    });
-                  }),
-            ],
-    );
-  }
-
-  void onTapFavorite() {
-    Navigator.pushNamed(context, Routes.favorites);
-  }
-
-  Widget __searchTextField() {
-    return TextField(
-      onChanged: (String s) {
-        if (s.isNotEmpty) {
-          _debounce?.cancel();
-          _debounce = Timer(Duration(milliseconds: _debounceDuration), () {
-            cubit.searchProducts(s);
-          });
-        } else {
-          cubit.fetchProducts();
-        }
-      },
-      autofocus: true,
-      controller: _searchController,
-      cursorColor: Colors.white,
-      style: AppTextStyles.textStyle(color: Colors.white, fontSize: 16),
-      textInputAction: TextInputAction.search,
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        hintText: 'Search...',
-        hintStyle: AppTextStyles.textStyle(color: Colors.white, fontSize: 16),
-      ),
-    );
   }
 }
