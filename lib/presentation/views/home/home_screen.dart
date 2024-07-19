@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:test_burning_bros/data/models/post_model.dart';
-import 'package:test_burning_bros/presentation/cubits/post/post_cubit.dart';
-import 'package:test_burning_bros/presentation/cubits/post/post_state.dart';
-import 'package:test_burning_bros/utils/extensions/app_extensions.dart';
+import 'package:test_burning_bros/core/theme/app_color.dart';
+import 'package:test_burning_bros/core/theme/app_textstyle.dart';
+import 'package:test_burning_bros/presentation/cubits/product/product_cubit.dart';
+import 'package:test_burning_bros/presentation/cubits/product/product_state.dart';
+import 'package:test_burning_bros/presentation/views/home/components/item_product.dart';
+import 'package:test_burning_bros/presentation/widgets/app_loading.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,21 +18,22 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  final int _postLimit = 10;
-  final TextEditingController _searchController = TextEditingController();
-
-  FocusNode focusNode = FocusNode();
-
+  final _searchController = TextEditingController();
+  bool _searchBoolean = false;
+  Timer? _debounce;
+  final int _debounceDuration = 900;
+  late ProductCubit cubit;
   @override
   void initState() {
     super.initState();
+    cubit = context.read<ProductCubit>();
     _scrollController.addListener(_onScroll);
-    context.read<PostCubit>().fetchPosts(page: 1, limit: _postLimit);
+    cubit.fetchProducts();
   }
 
   void _onScroll() {
     if (_isBottom) {
-      context.read<PostCubit>().fetchPosts(limit: _postLimit);
+      cubit.fetchProducts();
     }
   }
 
@@ -42,49 +47,60 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appbar(),
-      body: BlocConsumer<PostCubit, PostState>(
+      backgroundColor: Colors.white.withOpacity(0.9),
+      appBar: _appBar(),
+      body: BlocConsumer<ProductCubit, ProductState>(
         listener: (context, state) {},
         builder: (context, state) {
-          if (state is PostsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is PostsLoaded) {
-            return ListView.builder(
-              controller: _scrollController,
-              itemCount: state.posts.length + 1,
-              itemBuilder: (context, index) {
-                if (index == state.posts.length) {
-                  if (context.read<PostCubit>().hasMoreData) {
-                    return const Center(child: CircularProgressIndicator());
+          if (state is ProductsLoading || state is SearchLoading) {
+            return const AppLoading();
+          } else if (state is ProductLoaded) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: state.products.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == state.products.length) {
+                    if (context.read<ProductCubit>().hasMoreData) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 10),
+                        child: AppLoading(),
+                      );
+                    } else {
+                      return _noDataMore();
+                    }
                   } else {
-                    return const Center(child: Text('Đã load hết'));
+                    final item = state.products[index];
+                    return ItemProduct(item: item);
                   }
-                } else {
-                  final item = state.posts[index];
-                  return _item(index, item);
-                }
-              },
+                },
+              ),
             );
-          } else if (state is PostsError) {
-            return Center(child: Text(state.message));
-          } else if (state is SearchLoading) {
-            return const Center(child: CircularProgressIndicator());
           } else if (state is SearchLoaded) {
-            return ListView.builder(
-              itemCount: state.posts.length,
-              itemBuilder: (context, index) {
-                final item = state.posts[index];
-                return _item(index, item);
-              },
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: state.products.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: state.products.length,
+                      itemBuilder: (context, index) {
+                        final item = state.products[index];
+                        return ItemProduct(item: item);
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                      'No data',
+                      style: AppTextStyles.textStyle(fontSize: 16),
+                    )),
             );
-          } else if (state is SearchError) {
-            return Center(child: Text(state.message));
           }
           return Container();
         },
@@ -92,40 +108,76 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _item(int index, PostModel item) {
-    return GestureDetector(
-      onTap: () => focusNode.unfocusNode(),
-      child: Container(
-        color: index % 2 == 0 ? Colors.grey : Colors.white,
-        child: ListTile(
-          title: Center(child: Text(item.id.toString())),
-          subtitle: Center(child: Text(item.body.toString())),
-        ),
+  Center _noDataMore() {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Text(
+        'All data has been downloaded',
+        style: AppTextStyles.textStyle(color: Colors.grey),
       ),
-    );
+    ));
   }
 
-  AppBar _appbar() {
+  AppBar _appBar() {
     return AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.pink,
-      flexibleSpace: Container(),
-      title: TextField(
-        controller: _searchController,
-        style: const TextStyle(color: Colors.white),
-        cursorColor: Colors.white,
-        decoration: const InputDecoration(
-          hintText: 'Tìm kiếm...',
-          hintStyle: TextStyle(color: Colors.black),
-          border: InputBorder.none,
-        ),
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            context.read<PostCubit>().searchPostById(value);
-          } else {
-            context.read<PostCubit>().fetchPosts(page: 1, limit: _postLimit);
-          }
-        },
+        backgroundColor: AppColor.primaryColor,
+        automaticallyImplyLeading: false,
+        title: !_searchBoolean
+            ? Text(
+                'Product List',
+                style: AppTextStyles.textStyleBold(
+                    color: Colors.white, fontSize: 22),
+              )
+            : __searchTextField(),
+        actions: !_searchBoolean
+            ? [
+                IconButton(
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _searchBoolean = true;
+                      });
+                    })
+              ]
+            : [
+                IconButton(
+                    icon: const Icon(
+                      Icons.clear,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _searchBoolean = false;
+                      });
+                    })
+              ]);
+  }
+
+  Widget __searchTextField() {
+    return TextField(
+      onChanged: (String s) {
+        if (s.isNotEmpty) {
+          _debounce?.cancel();
+          _debounce = Timer(Duration(milliseconds: _debounceDuration), () {
+            cubit.searchProducts(s);
+          });
+        } else {
+          cubit.fetchProducts();
+        }
+      },
+      autofocus: true,
+      controller: _searchController,
+      cursorColor: Colors.white,
+      style: AppTextStyles.textStyle(color: Colors.white, fontSize: 16),
+      textInputAction: TextInputAction.search,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: 'Search...',
+        hintStyle: AppTextStyles.textStyle(color: Colors.white, fontSize: 16),
       ),
     );
   }

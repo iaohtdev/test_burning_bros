@@ -1,5 +1,8 @@
-import 'package:test_burning_bros/data/models/post_model.dart';
+import 'package:test_burning_bros/data/models/product_model.dart';
 
 abstract class ProductRepository {
-  Future<List<PostModel>> fetchPost({int? page, int? limit});
+  Future<ProductModel> fetchProduct({int? page, int? limit});
+  Future<List<ProductItem>> search({
+    String? query,
+  });
 }

@@ -1,0 +1,1 @@
+ /Users/iaohtdev/Work/Flutter/test_burning_bros/.dart_tool/flutter_build/da2264ab8d1bfc9796d51ad0ebc585ef/native_assets.yaml: 

@@ -5,7 +5,7 @@ import 'package:test_burning_bros/core/router/app_routes.dart';
 import 'package:test_burning_bros/core/theme/theme.dart';
 import 'package:test_burning_bros/di.dart';
 import 'package:test_burning_bros/domain/repositories/product_repository.dart';
-import 'package:test_burning_bros/presentation/cubits/post/post_cubit.dart';
+import 'package:test_burning_bros/presentation/cubits/product/product_cubit.dart';
 
 void main() {
   setupLocator();
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => PostCubit(getIt<ProductRepository>()),
+          create: (context) => ProductCubit(getIt<ProductRepository>()),
         ),
       ],
       child: MaterialApp(
