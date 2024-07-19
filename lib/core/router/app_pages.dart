@@ -1,6 +1,7 @@
 import 'package:test_burning_bros/core/router/app_routes.dart';
 
 import 'package:flutter/material.dart';
+import 'package:test_burning_bros/presentation/views/favorites/favorites_screen.dart';
 import 'package:test_burning_bros/presentation/views/home/home_screen.dart';
 
 class AppPages {
@@ -10,6 +11,10 @@ class AppPages {
         return customPageRoute(
             pageBuilder: (context, animation, secondaryAnimation) =>
                 const HomeScreen());
+      case Routes.favorites:
+        return customPageRoute(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const FavoritesScreen());
 
       default:
         return customPageRoute(

@@ -7,6 +7,7 @@ class AppTheme {
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       useMaterial3: true,
       scaffoldBackgroundColor: Colors.white,
-      appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white, surfaceTintColor: Colors.white));
+      appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white.withOpacity(0.9),
+          surfaceTintColor: Colors.white));
 }

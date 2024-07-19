@@ -1,24 +1,39 @@
-import 'package:test_burning_bros/core/config/dio_config.dart';
-import 'package:test_burning_bros/data/datasources/product_remote_data_source.dart';
-import 'package:test_burning_bros/data/repositories/product_repository_impl.dart';
-import 'package:test_burning_bros/domain/repositories/product_repository.dart';
-import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:test_burning_bros/core/config/dio_config.dart';
+import 'package:test_burning_bros/data/datasources/favorite_remote_data_source.dart';
+import 'package:test_burning_bros/data/datasources/product_remote_data_source.dart';
+import 'package:test_burning_bros/data/models/product_model.dart';
+import 'package:test_burning_bros/data/repositories/favorite_repository_impl.dart';
+import 'package:test_burning_bros/data/repositories/product_repository_impl.dart';
+import 'package:test_burning_bros/domain/repositories/favorite_repository.dart';
+import 'package:test_burning_bros/domain/repositories/product_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
-void setupLocator() {
-  getIt.registerLazySingleton<Dio>(() => Dio(
-        DioConfig.options,
-      ));
+Future<void> setupDI() async {
+  // Initialize Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProductItemAdapter());
+  final favoritesBox = await Hive.openBox<ProductItem>('favorites');
 
-  //Repository
-  getIt.registerLazySingleton<ProductRepository>(
-      () => ProductRepositoryImpl(getIt()));
+  // Register Dio
+  getIt.registerLazySingleton<Dio>(() => Dio(DioConfig.options));
 
-  // Data Source
+  // Register Local Data Source
+  getIt.registerLazySingleton<FavoriteLocalDataSource>(
+      () => FavoriteLocalDataSourceImpl(favoritesBox));
+
+  // Register Remote Data Source
   getIt.registerLazySingleton<ProductDataSource>(
       () => ProductRemoteDataSourceImpl());
+
+  // Register Repositories
+  getIt.registerLazySingleton<ProductRepository>(
+      () => ProductRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<FavoriteRepository>(
+      () => FavoriteRepositoryImpl(localDataSource: getIt()));
 }
 
 Dio get dio => getIt<Dio>();

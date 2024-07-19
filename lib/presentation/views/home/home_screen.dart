@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_burning_bros/core/router/app_routes.dart';
 import 'package:test_burning_bros/core/theme/app_color.dart';
 import 'package:test_burning_bros/core/theme/app_textstyle.dart';
 import 'package:test_burning_bros/presentation/cubits/product/product_cubit.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -121,40 +122,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   AppBar _appBar() {
     return AppBar(
-        backgroundColor: AppColor.primaryColor,
-        automaticallyImplyLeading: false,
-        title: !_searchBoolean
-            ? Text(
-                'Product List',
-                style: AppTextStyles.textStyleBold(
-                    color: Colors.white, fontSize: 22),
-              )
-            : __searchTextField(),
-        actions: !_searchBoolean
-            ? [
-                IconButton(
-                    icon: const Icon(
-                      Icons.search,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _searchBoolean = true;
-                      });
-                    })
-              ]
-            : [
-                IconButton(
-                    icon: const Icon(
-                      Icons.clear,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _searchBoolean = false;
-                      });
-                    })
-              ]);
+      backgroundColor: AppColor.primaryColor,
+      automaticallyImplyLeading: false,
+      title: !_searchBoolean
+          ? Text(
+              'Product List',
+              style: AppTextStyles.textStyleBold(
+                  color: Colors.white, fontSize: 22),
+            )
+          : __searchTextField(),
+      actions: !_searchBoolean
+          ? [
+              IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _searchBoolean = true;
+                    });
+                  }),
+              IconButton(
+                  icon: const Icon(
+                    Icons.favorite,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => onTapFavorite()),
+            ]
+          : [
+              IconButton(
+                  icon: const Icon(
+                    Icons.clear,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _searchBoolean = false;
+                    });
+                  }),
+            ],
+    );
+  }
+
+  void onTapFavorite() {
+    Navigator.pushNamed(context, Routes.favorites);
   }
 
   Widget __searchTextField() {
