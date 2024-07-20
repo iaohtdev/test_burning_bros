@@ -28,47 +28,32 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
 #### Flutter SDK
 - **flutter**: Core Flutter SDK.
 - **cupertino_icons**: Icons for iOS.
-
 #### State Management
 - **flutter_bloc**: BLoC library for state management.
 - **equatable**: Library for value-based object comparison.
-
 #### Networking and API
 - **dio**: HTTP client library for network requests.
-
 #### Dependency Injection
 - **get_it**: Dependency Injection library.
-
 #### Data Storage
 - **hive**: Lightweight NoSQL database for Flutter.
 - **hive_flutter**: Hive integration with Flutter.
-
 #### Serialization
 - **json_annotation**: Library for annotating classes for JSON serialization and deserialization.
 - **json_serializable**: Code generation tool for serialization based on annotations.
-
 #### Image Handling
 - **cached_network_image**: Library for loading and caching images from URLs.
-
 #### Connectivity
 - **connectivity_plus**: Library for checking network connectivity.
-
 #### Localization
 - **intl**: Library for internationalization and date/time formatting.
-
 #### Toast Notifications
 - **fluttertoast**: Library for showing toast notifications.
 
-### Dev Dependencies
 
-#### Code Generation
-- **build_runner**: Build tool for code generation tasks.
-  
-#### Testing
-- **flutter_test**: Official Flutter testing library.
+## Screens
+![test_burning_bros](https://github.com/user-attachments/assets/75edddbf-e288-4eff-bd66-cdba7d583f3f)
 
-#### Linting
-- **flutter_lints**: Linting rules for Flutter code.
 ## Setup
 
 1. **Clone the Repository**
