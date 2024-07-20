@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: state.products.length + 1,
                 itemBuilder: (context, index) {
                   if (index == state.products.length) {
-                    if (context.read<ProductCubit>().hasMoreData) {
+                    if (cubit.hasMoreData) {
                       return const Padding(
                         padding: EdgeInsets.only(top: 10),
                         child: AppLoading(),

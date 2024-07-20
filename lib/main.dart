@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_burning_bros/core/network/network_infor.dart';
 import 'package:test_burning_bros/core/router/app_pages.dart';
 import 'package:test_burning_bros/core/router/app_routes.dart';
 import 'package:test_burning_bros/core/theme/theme.dart';
@@ -24,10 +25,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProductCubit(getIt<ProductRepository>()),
+          create: (context) =>
+              ProductCubit(getIt<ProductRepository>(), getIt<NetworkInfo>()),
         ),
         BlocProvider(
-          create: (context) => FavoriteCubit(getIt<FavoriteRepository>()),
+          create: (context) => FavoriteCubit(
+            getIt<FavoriteRepository>(),
+          ),
         ),
       ],
       child: MaterialApp(

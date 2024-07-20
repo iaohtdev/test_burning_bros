@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:test_burning_bros/core/config/dio_config.dart';
+import 'package:test_burning_bros/core/network/network_infor.dart';
 import 'package:test_burning_bros/data/datasources/favorite_remote_data_source.dart';
 import 'package:test_burning_bros/data/datasources/product_remote_data_source.dart';
 import 'package:test_burning_bros/data/models/product_model.dart';
@@ -34,6 +36,9 @@ Future<void> setupDI() async {
       () => ProductRepositoryImpl(getIt()));
   getIt.registerLazySingleton<FavoriteRepository>(
       () => FavoriteRepositoryImpl(localDataSource: getIt()));
+
+  // Network Info
+  getIt.registerLazySingleton<NetworkInfo>(() => NetworkInfo(Connectivity()));
 }
 
 Dio get dio => getIt<Dio>();
