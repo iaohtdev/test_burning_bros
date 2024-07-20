@@ -36,19 +36,4 @@ class AppTextStyles {
         fontWeight: fontWeight ?? FontWeight.w500,
         fontFamily: fontBold);
   }
-
-  static TextStyle l1() {
-    return TextStyle(
-        fontFamily: AppTextStyles.fontBold, fontSize: 30, color: Colors.black);
-  }
-
-  static TextStyle l2() {
-    return TextStyle(
-        fontFamily: AppTextStyles.fontBold, fontSize: 26, color: Colors.black);
-  }
-
-  static TextStyle l3() {
-    return TextStyle(
-        fontFamily: AppTextStyles.fontBold, fontSize: 22, color: Colors.white);
-  }
 }
