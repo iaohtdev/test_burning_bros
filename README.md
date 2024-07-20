@@ -75,7 +75,7 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
 
     ```bash
     git clone https://github.com/iaohtdev/test_burning_bros.git
-    cd product-management-app
+    cd test_burning_bros
     ```
 
 2. **Install Dependencies**
