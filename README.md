@@ -27,34 +27,6 @@ The project is structured using Clean Architecture principles:
 
 State management is handled using Flutter's Cubit. The `ProductCubit` manages the state for fetching and searching products, while the `FavoriteCubit` handles the state for managing favorite products.
 
-### Dependencies
-
-#### Flutter SDK
-- **flutter**: Core Flutter SDK.
-- **cupertino_icons**: Icons for iOS.
-#### State Management
-- **flutter_bloc**: BLoC library for state management.
-- **equatable**: Library for value-based object comparison.
-#### Networking and API
-- **dio**: HTTP client library for network requests.
-#### Dependency Injection
-- **get_it**: Dependency Injection library.
-#### Data Storage
-- **hive**: Lightweight NoSQL database for Flutter.
-- **hive_flutter**: Hive integration with Flutter.
-#### Serialization
-- **json_annotation**: Library for annotating classes for JSON serialization and deserialization.
-- **json_serializable**: Code generation tool for serialization based on annotations.
-#### Image Handling
-- **cached_network_image**: Library for loading and caching images from URLs.
-#### Connectivity
-- **connectivity_plus**: Library for checking network connectivity.
-#### Localization
-- **intl**: Library for internationalization and date/time formatting.
-#### Toast Notifications
-- **fluttertoast**: Library for showing toast notifications.
-
-
 ## Setup
 
 1. **Clone the Repository**
@@ -88,6 +60,35 @@ Add and remove products from favorites using the `FavoriteCubit`. The favorites 
 
 - **Network Errors**: Display toast messages when there is no internet connection.
 - **Fetch Errors**: Show error messages in the UI if product fetching fails.
+
+
+## Dependencies
+
+### Flutter SDK
+- **flutter**: Core Flutter SDK.
+- **cupertino_icons**: Icons for iOS.
+### State Management
+- **flutter_bloc**: BLoC library for state management.
+- **equatable**: Library for value-based object comparison.
+### Networking and API
+- **dio**: HTTP client library for network requests.
+### Dependency Injection
+- **get_it**: Dependency Injection library.
+### Data Storage
+- **hive**: Lightweight NoSQL database for Flutter.
+- **hive_flutter**: Hive integration with Flutter.
+### Serialization
+- **json_annotation**: Library for annotating classes for JSON serialization and deserialization.
+- **json_serializable**: Code generation tool for serialization based on annotations.
+### Image Handling
+- **cached_network_image**: Library for loading and caching images from URLs.
+### Connectivity
+- **connectivity_plus**: Library for checking network connectivity.
+### Localization
+- **intl**: Library for internationalization and date/time formatting.
+### Toast Notifications
+- **fluttertoast**: Library for showing toast notifications.
+
 
 ## Example
 
