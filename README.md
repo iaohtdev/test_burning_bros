@@ -9,6 +9,10 @@ This is a Flutter application that allows users to view, search, and manage a li
 - **Favorites**: Add and remove products from favorites. View all favorite products in a separate screen.
 - **Network Checking**: Handle no internet connection scenarios with appropriate error messages.
 
+
+## Screens
+![test_burning_bros](https://github.com/user-attachments/assets/75edddbf-e288-4eff-bd66-cdba7d583f3f)
+
 ## Architecture
 
 ### Clean Architecture
@@ -50,9 +54,6 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
 #### Toast Notifications
 - **fluttertoast**: Library for showing toast notifications.
 
-
-## Screens
-![test_burning_bros](https://github.com/user-attachments/assets/75edddbf-e288-4eff-bd66-cdba7d583f3f)
 
 ## Setup
 
