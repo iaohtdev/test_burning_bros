@@ -63,10 +63,7 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
 
 #### Code Generation
 - **build_runner**: Build tool for code generation tasks.
-
-#### JSON Serialization
-- **json_serializable**: Used for automatic code generation for JSON serialization.
-
+  
 #### Testing
 - **flutter_test**: Official Flutter testing library.
 
@@ -77,7 +74,7 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/your-repository/product-management-app.git
+    git clone https://github.com/iaohtdev/test_burning_bros.git
     cd product-management-app
     ```
 
@@ -86,38 +83,6 @@ State management is handled using Flutter's Cubit. The `ProductCubit` manages th
     ```bash
     flutter pub get
     ```
-
-3. **Setup Dependencies**
-
-    Ensure you have the required dependencies in your `pubspec.yaml`:
-
-    ```yaml
-    dependencies:
-      flutter:
-        sdk: flutter
-      dio: ^4.0.0
-      hive: ^2.0.4
-      fluttertoast: ^8.0.8
-      connectivity: ^3.0.6
-      flutter_bloc: ^8.0.0
-    ```
-
-4. **Setup Hive**
-
-    Initialize Hive in your `main.dart`:
-
-    ```dart
-    void main() async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await Hive.initFlutter();
-      // Register Hive adapters here
-      runApp(MyApp());
-    }
-    ```
-
-5. **Network Information**
-
-    Ensure `NetworkInfo` is properly initialized and injected using GetIt for network connectivity checks.
 
 ## Usage
 
