@@ -13,6 +13,13 @@ This is a Flutter application that allows users to view, search, and manage a li
 ## Screens
 ![test_burning_bros](https://github.com/user-attachments/assets/75edddbf-e288-4eff-bd66-cdba7d583f3f)
 
+## Video
+
+
+https://github.com/user-attachments/assets/c975f5fb-1b95-4b6f-b028-db161dfc876a
+
+
+
 ## Architecture
 
 ### Clean Architecture
