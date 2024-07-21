@@ -104,6 +104,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             );
+          } else if (state is ProductError) {
+            return Center(
+                child: Text(
+              'Something went wrong',
+              style: AppTextStyles.textStyle(fontSize: 16),
+            ));
           } else if (state is SearchLoaded) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),

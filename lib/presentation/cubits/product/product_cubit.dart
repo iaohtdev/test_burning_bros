@@ -52,6 +52,7 @@ class ProductCubit extends Cubit<ProductState> {
       emit(ProductLoaded(products));
     } catch (e) {
       emit(ProductError('$e'));
+      print(e);
     } finally {
       isFetching = false;
     }
